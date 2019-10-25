@@ -1,0 +1,24 @@
+{
+  "name": "adv-hangman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kspaffk/adv-hangman.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kspaffk/adv-hangman/issues"
+  },
+  "homepage": "https://github.com/kspaffk/adv-hangman#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "inquirer": "^7.0.0",
+    "random-words": "^1.1.0"
+  }
+}

@@ -7,6 +7,7 @@ var tries;
 var gameWordArray = [];
 var guessWordArray = [];
 var originalWordArray = [];
+var guessedLetterStr = "";
 
 var getRandomWords = function() {
     gameWordArray = [];
@@ -20,6 +21,7 @@ var newGame = function() {
     tries = 5;
     getRandomWords();
     guessWordArray = [];
+    guessedLetterStr = "";
     gameWordArray.forEach(word => {
         guessWordArray.push(word.getWordStr());
     });
@@ -40,16 +42,17 @@ var promptForLetter = function() {
                 name: "guessedLetter",
                 message: chalk.cyanBright("Guess a letter!"),
                 validate: function(value) {
-                    if (value.length === 1 && /[a-z]/i.test(value)) {
+                    if (value.length === 1 && /[a-z]/i.test(value) && !guessedLetterStr.includes(value)) {
                         return true;
                     }
-                    return "Enter a valid letter!";
+                    return "Enter a valid letter or one you haven't guessed!";
                 }
             }
         ])
         .then(answers => {
             guessWordArray = [];
             correctGuess = false;
+            guessedLetterStr += answers.guessedLetter.toLowerCase() + " ";
             gameWordArray.forEach(word => {
                 if (word.guessLetter(answers.guessedLetter.toLowerCase())) {
                     correctGuess = true;
@@ -65,13 +68,16 @@ var promptForLetter = function() {
             }
 
             if (hasWonGame()) {
-                console.log(chalk.green("Congratulations! You won!" + chalk.yellowBright("\nThe answer was: " + originalWordArray.join(" "))));
+                console.log(guessWordArray.join("  ") + "\n");
+                console.log(chalk.green("Congratulations! You won!"));
                 playAgain();
             } else if (tries > 0) {
-                console.log(chalk.yellow("\nYou have " + tries + " tries remaining!\n"));
+                console.log(chalk.yellowBright("\nYou have " + tries + " tries remaining!\n"));
+                console.log(chalk.magentaBright("Guessed Letters: " + guessedLetterStr + "\n"));
                 console.log(guessWordArray.join("  ") + "\n");
                 promptForLetter();
             } else {
+                console.log(guessWordArray.join("  ") + "\n");
                 console.log(chalk.redBright("You have ran out of tries!" + chalk.yellowBright("\nThe answer was: " + originalWordArray.join(" "))));
                 playAgain();
             }
@@ -79,6 +85,12 @@ var promptForLetter = function() {
 
         });
 };
+
+var logOutWords = function() {
+    gameWordArray.forEach(word => {
+        guessWordArray.push(word.getWordStr());
+    });
+}
 
 var hasWonGame = function() {
     hasWon = true;
